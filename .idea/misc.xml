@@ -5,7 +5,9 @@
       <map>
         <entry key="../../../../layout/custom_preview.xml" value="0.1" />
         <entry key="app/src/main/res/layout/activity_main.xml" value="0.1" />
+        <entry key="app/src/main/res/layout/activity_main2.xml" value="0.1403985507246377" />
         <entry key="app/src/main/res/layout/activity_restaurants.xml" value="0.16802536231884058" />
+        <entry key="app/src/main/res/layout/restaurant_list_item.xml" value="0.1331521739130435" />
       </map>
     </option>
   </component>
