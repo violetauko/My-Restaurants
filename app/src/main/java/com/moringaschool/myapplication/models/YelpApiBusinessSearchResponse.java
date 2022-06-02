@@ -8,6 +8,9 @@ import com.google.gson.annotations.SerializedName;
 import com.moringaschool.myapplication.models.Business;
 import com.moringaschool.myapplication.models.Region;
 
+import org.parceler.Parcel;
+
+@Parcel
 public class YelpApiBusinessSearchResponse {
 
     @SerializedName("total")

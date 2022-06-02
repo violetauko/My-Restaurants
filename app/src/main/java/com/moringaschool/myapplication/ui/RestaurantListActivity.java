@@ -32,8 +32,8 @@ import retrofit2.Callback;
 import retrofit2.Response;
 
 
-public class RestaurantsActivity extends AppCompatActivity {
-    private static final String TAG = RestaurantsActivity.class.getSimpleName();
+public class RestaurantListActivity extends AppCompatActivity {
+    private static final String TAG = RestaurantListActivity.class.getSimpleName();
     @BindView(R.id.recyclerView)
     RecyclerView mRecyclerView;
     @BindView(R.id.errorTextView) TextView mErrorTextView;
@@ -51,10 +51,10 @@ public class RestaurantsActivity extends AppCompatActivity {
         //mListView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
           //  @Override
             //public void onItemClick(AdapterView<?> adapterView, View view, int position, long l) {
-               // Log.v("RestaurantsActivity", "In the onItemClickListener!");
+               // Log.v("RestaurantListActivity", "In the onItemClickListener!");
                // String restaurant = ((TextView)view).getText().toString();
-                //Toast.makeText(RestaurantsActivity.this, restaurant, Toast.LENGTH_LONG).show();
-                //Log.d("RestaurantsActivity", "In the onCreate method");
+                //Toast.makeText(RestaurantListActivity.this, restaurant, Toast.LENGTH_LONG).show();
+                //Log.d("RestaurantListActivity", "In the onCreate method");
             //}
         ;
         Intent intent = getIntent();
@@ -72,10 +72,10 @@ public class RestaurantsActivity extends AppCompatActivity {
                 if (response.isSuccessful()){
 
                 restaurants = response.body().getBusinesses();
-                mAdapter = new RestaurantListAdapter(RestaurantsActivity.this, restaurants);
+                mAdapter = new RestaurantListAdapter(RestaurantListActivity.this, restaurants);
                 mRecyclerView.setAdapter(mAdapter);
                 RecyclerView.LayoutManager layoutManager =
-                        new LinearLayoutManager(RestaurantsActivity.this);
+                        new LinearLayoutManager(RestaurantListActivity.this);
                 mRecyclerView.setLayoutManager(layoutManager);
                 mRecyclerView.setHasFixedSize(true);
 

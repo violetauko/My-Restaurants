@@ -6,7 +6,9 @@ import com.google.gson.annotations.Expose;
 import com.google.gson.annotations.SerializedName;
 import com.moringaschool.myapplication.models.Center;
 
+import org.parceler.Parcel;
 
+@Parcel
 public class Region {
 
     @SerializedName("center")

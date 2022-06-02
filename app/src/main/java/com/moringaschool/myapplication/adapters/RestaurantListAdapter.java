@@ -1,6 +1,7 @@
 package com.moringaschool.myapplication.adapters;
 
 import android.content.Context;
+import android.content.Intent;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -11,7 +12,10 @@ import androidx.recyclerview.widget.RecyclerView;
 
 import com.moringaschool.myapplication.R;
 import com.moringaschool.myapplication.models.Business;
+import com.moringaschool.myapplication.ui.RestaurantDetailActivity;
 import com.squareup.picasso.Picasso;
+
+import org.parceler.Parcels;
 
 import java.util.List;
 
@@ -40,12 +44,13 @@ public class RestaurantListAdapter extends RecyclerView.Adapter<RestaurantListAd
 
     }
 
+
     @Override
     public int getItemCount() {
         return mRestaurants.size();//return the size of the list of restaurants
     }
 
-    public class RestaurantViewHolder extends RecyclerView.ViewHolder {
+    public class RestaurantViewHolder extends RecyclerView.ViewHolder implements View.OnClickListener {
         @BindView(R.id.restaurantImageView)
         ImageView mRestaurantImageView;
         @BindView(R.id.restaurantNameTextView)
@@ -60,6 +65,7 @@ public class RestaurantListAdapter extends RecyclerView.Adapter<RestaurantListAd
             super(itemView);//call the superclass constructor with the view passed in as a parameter .
             ButterKnife.bind(this, itemView);//bind the viewholder to the view
             mContext = itemView.getContext();
+            itemView.setOnClickListener(this);//set the onclicklistener to the itemview
         }
 
         public void bindRestaurant(Business restaurant) {
@@ -68,6 +74,15 @@ public class RestaurantListAdapter extends RecyclerView.Adapter<RestaurantListAd
             mRatingTextView.setText("Rating: " + restaurant.getRating() + "/5");//set the rating .
             Picasso.get().load(restaurant.getImageUrl()).into(mRestaurantImageView);
 
+        }
+
+        @Override
+        public void onClick(View v) {
+           int itemPosition = getLayoutPosition();//get the position of the item that was clicked.
+           Intent intent = new Intent(mContext, RestaurantDetailActivity.class);//create a new intent to open the restaurant detail activity.
+              intent.putExtra("position", itemPosition);//put the position of the restaurant in the intent.
+                intent.putExtra("restaurants", Parcels.wrap(mRestaurants));//put the restaurant in the intent.
+                mContext.startActivity(intent);//start the activity.
         }
     }
 }
