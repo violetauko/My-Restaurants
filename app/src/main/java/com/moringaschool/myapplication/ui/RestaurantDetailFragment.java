@@ -12,7 +12,13 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageView;
 import android.widget.TextView;
+import android.widget.Toast;
 
+import com.google.firebase.auth.FirebaseAuth;
+import com.google.firebase.auth.FirebaseUser;
+import com.google.firebase.database.DatabaseReference;
+import com.google.firebase.database.FirebaseDatabase;
+import com.moringaschool.myapplication.Constants;
 import com.moringaschool.myapplication.R;
 import com.moringaschool.myapplication.models.Business;
 import com.moringaschool.myapplication.models.Category;
@@ -35,12 +41,18 @@ public class RestaurantDetailFragment extends Fragment implements View.OnClickLi
     ImageView mImageLabel;
     @BindView(R.id.restaurantNameTextView)
     TextView mNameLabel;
-    @BindView(R.id.cuisineTextView) TextView mCategoriesLabel;
-    @BindView(R.id.ratingTextView) TextView mRatingLabel;
-    @BindView(R.id.websiteTextView) TextView mWebsiteLabel;
-    @BindView(R.id.phoneTextView) TextView mPhoneLabel;
-    @BindView(R.id.addressTextView) TextView mAddressLabel;
-    @BindView(R.id.saveRestaurantButton) TextView mSaveRestaurantButton;
+    @BindView(R.id.cuisineTextView)
+    TextView mCategoriesLabel;
+    @BindView(R.id.ratingTextView)
+    TextView mRatingLabel;
+    @BindView(R.id.websiteTextView)
+    TextView mWebsiteLabel;
+    @BindView(R.id.phoneTextView)
+    TextView mPhoneLabel;
+    @BindView(R.id.addressTextView)
+    TextView mAddressLabel;
+    @BindView(R.id.saveRestaurantButton)
+    TextView mSaveRestaurantButton;
 
 
     private Business mRestaurant;
@@ -70,13 +82,13 @@ public class RestaurantDetailFragment extends Fragment implements View.OnClickLi
 
         // Inflate the layout for this fragment
 
-        View view =  inflater.inflate(R.layout.fragment_restaurant_detail, container, false);
+        View view = inflater.inflate(R.layout.fragment_restaurant_detail, container, false);
         ButterKnife.bind(this, view);
         Picasso.get().load(mRestaurant.getImageUrl()).into(mImageLabel);
 
         List<String> categories = new ArrayList<>();
 
-        for (Category category: mRestaurant.getCategories()) {
+        for (Category category : mRestaurant.getCategories()) {
             categories.add(category.getTitle());
         }
 
@@ -94,17 +106,32 @@ public class RestaurantDetailFragment extends Fragment implements View.OnClickLi
 
     @Override
     public void onClick(View v) {
-        if(v == mWebsiteLabel) {
+        if (v == mWebsiteLabel) {
             Intent webIntent = new Intent(Intent.ACTION_VIEW, Uri.parse(mRestaurant.getUrl()));
             startActivity(webIntent);
         }
-        if(v == mPhoneLabel) {
+        if (v == mPhoneLabel) {
             Intent phoneIntent = new Intent(Intent.ACTION_DIAL, Uri.parse("tel:" + mRestaurant.getPhone()));
             startActivity(phoneIntent);
         }
-        if(v == mAddressLabel) {
+        if (v == mAddressLabel) {
             Intent mapIntent = new Intent(Intent.ACTION_VIEW, Uri.parse("geo:" + mRestaurant.getCoordinates().getLatitude() + "," + mRestaurant.getCoordinates().getLongitude() + "?q=" + mRestaurant.getName() + ")"));
             startActivity(mapIntent);
+        }
+        if (v == mSaveRestaurantButton) {
+            FirebaseUser user = FirebaseAuth.getInstance().getCurrentUser();
+            String uid = user.getUid();
+            DatabaseReference restaurantRef = FirebaseDatabase
+                    .getInstance()
+                    .getReference(Constants.FIREBASE_CHILD_RESTAURANTS)
+                    .child(uid);
+
+            DatabaseReference pushRef = restaurantRef.push();
+            String pushId = pushRef.getKey();
+            mRestaurant.setPushId(pushId);
+            pushRef.setValue(mRestaurant);
+
+            Toast.makeText(getContext(), "Saved", Toast.LENGTH_SHORT).show();
         }
     }
 }

@@ -3,8 +3,6 @@ package com.moringaschool.myapplication.network;
 import static com.moringaschool.myapplication.Constants.YELP_API_KEY;
 import static com.moringaschool.myapplication.Constants.YELP_BASE_URL;
 
-import com.moringaschool.myapplication.network.YelpApi;
-
 import java.io.IOException;
 
 import okhttp3.Interceptor;
@@ -25,19 +23,19 @@ public class YelpClient {
                         public Response intercept(Chain chain) throws IOException {
                            Request newRequest = chain.request().newBuilder()
                                     .addHeader("Authorization", YELP_API_KEY)
-                                    .build();
-                            return chain.proceed(newRequest);
+                                    .build();//
+                            return chain.proceed(newRequest);//proceeds with the request
                         }
                     })
                     .build();
 
             retrofit = new Retrofit.Builder()
-                    .baseUrl(YELP_BASE_URL)
-                    .client(OkHttpClient)
-                    .addConverterFactory(GsonConverterFactory.create())
+                    .baseUrl(YELP_BASE_URL)//base url for the yelp api
+                    .client(OkHttpClient)//adds the authorization header
+                    .addConverterFactory(GsonConverterFactory.create())//handles data serialization from JSON to Java objects
                     .build();
         }
-        return retrofit.create(YelpApi.class);
+        return retrofit.create(YelpApi.class);//creates the yelp api
 
         }
 
